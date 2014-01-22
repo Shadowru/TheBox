@@ -1,11 +1,11 @@
-package org.shadow.thebox.core.module.root;
+package org.shadow.thebox.core.module.coremodule;
 
 import org.shadow.thebox.core.db.entities.modules.ModuleEntity;
 import org.shadow.thebox.core.module.impl.TheBoxModuleImpl;
 
-public class RootModule extends TheBoxModuleImpl {
+public class CoreModule extends TheBoxModuleImpl {
 
-    public RootModule(ModuleEntity moduleInfo) {
+    public CoreModule(ModuleEntity moduleInfo) {
         super(moduleInfo);
     }
 
