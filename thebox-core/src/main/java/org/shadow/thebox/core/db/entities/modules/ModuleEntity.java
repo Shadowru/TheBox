@@ -35,6 +35,8 @@ public class ModuleEntity {
     @Column(unique = true)
     String packageModule;
 
+    boolean installed = false;
+
     public String getModuleID() {
         return moduleID;
     }
@@ -139,6 +141,11 @@ public class ModuleEntity {
         this.packageModule = packageModule;
     }
 
+    public boolean isInstalled() {
+        return installed;
+    }
 
-
+    public void setInstalled(boolean installed) {
+        this.installed = installed;
+    }
 }
