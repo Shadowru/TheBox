@@ -5,8 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- *  Base class for TheBox Modules
+ * Base class for TheBox Modules
  */
+
 @Entity
 public class ModuleEntity {
 
@@ -14,7 +15,7 @@ public class ModuleEntity {
     String moduleID;
     String parentModuleID;
 
-    int  parentModuleMinimalMajorVersion;
+    int parentModuleMinimalMajorVersion;
     int parentModuleMinimalMinorVersion;
 
     @Column(nullable = false, unique = true)
@@ -31,9 +32,9 @@ public class ModuleEntity {
     String commentary;
 
     @Column(unique = true)
-    String beanName;
+    String className;
     @Column(unique = true)
-    String packageModule;
+    String modulePackage;
 
     boolean installed = false;
 
@@ -125,20 +126,20 @@ public class ModuleEntity {
         this.commentary = commentary;
     }
 
-    public String getBeanName() {
-        return beanName;
+    public String getClassName() {
+        return className;
     }
 
-    public void setBeanName(String beanName) {
-        this.beanName = beanName;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public String getPackageModule() {
-        return packageModule;
+    public String getModulePackage() {
+        return modulePackage;
     }
 
-    public void setPackageModule(String packageModule) {
-        this.packageModule = packageModule;
+    public void setModulePackage(String modulePackage) {
+        this.modulePackage = modulePackage;
     }
 
     public boolean isInstalled() {

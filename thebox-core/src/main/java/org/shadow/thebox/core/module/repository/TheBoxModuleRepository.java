@@ -2,6 +2,7 @@ package org.shadow.thebox.core.module.repository;
 
 import org.shadow.thebox.core.db.entities.modules.ModuleEntity;
 import org.shadow.thebox.core.db.repositories.modules.ModuleRepository;
+import org.shadow.thebox.core.module.coremodule.CoreModule;
 import org.shadow.thebox.core.module.intf.TheBoxModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -13,18 +14,17 @@ import java.util.List;
 public class TheBoxModuleRepository {
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     private ModuleRepository moduleRepository;
 
     public TheBoxModule getModule(String moduleID) {
 
-        ModuleEntity me = moduleRepository.findByID(moduleID);
+        ModuleEntity me = moduleRepository.findByModuleID(moduleID);
+
+        System.out.println("me = " + me);
 
         //TODO: Init modules
 
-        return null;
+        return new CoreModule();
     }
 
     public TheBoxModuleRepository() {

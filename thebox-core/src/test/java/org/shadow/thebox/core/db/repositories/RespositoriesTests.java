@@ -10,6 +10,7 @@ import org.shadow.thebox.core.db.entities.users.UserOfTheBox;
 import org.shadow.thebox.core.db.repositories.modules.ModuleRepository;
 import org.shadow.thebox.core.db.repositories.user.PersonRepository;
 import org.shadow.thebox.core.db.repositories.user.RoleRepository;
+import org.shadow.thebox.core.module.coremodule.CoreModule;
 import org.shadow.thebox.core.module.intf.TheBoxModule;
 import org.shadow.thebox.core.module.repository.TheBoxModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:applicationContext-repositories-tests.xml")
@@ -172,7 +174,7 @@ public class RespositoriesTests {
 
         ModuleEntity m = new ModuleEntity();
 
-        m.setBeanName("rootModule");
+        m.setClassName("rootModule");
         m.setModuleID("rootModule");
         m.setModuleName("");
 
@@ -180,10 +182,19 @@ public class RespositoriesTests {
 
         Assert.assertEquals("Check for module", 1, moduleRepository.findAll().size());
 
+        CoreModule cm = new CoreModule();
+
+        cm.installModule();
 
         TheBoxModuleRepository tbmr = (TheBoxModuleRepository)ac.getBean("theBoxModuleRepository");
 
-        TheBoxModule tbm = tbmr.getModule("rootModule");
+        List<ModuleEntity> modules = moduleRepository.findAll();
+
+        for (ModuleEntity module : modules) {
+            System.out.println("module = " + module);
+        }
+
+        TheBoxModule tbm = tbmr.getModule("coremodule");
 
         System.out.println("tbm.getModuleMajorVersion() = " + tbm.getModuleMajorVersion());
 

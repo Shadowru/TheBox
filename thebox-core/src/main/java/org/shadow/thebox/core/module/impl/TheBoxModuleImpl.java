@@ -11,9 +11,11 @@ public abstract class TheBoxModuleImpl implements TheBoxModule {
     private ModuleEntity moduleInfo;
 
     public TheBoxModuleImpl(ModuleEntity moduleInfo) {
-
         this.moduleInfo = moduleInfo;
+    }
 
+    protected TheBoxModuleImpl() {
+        this.moduleInfo = null;
     }
 
     @Override

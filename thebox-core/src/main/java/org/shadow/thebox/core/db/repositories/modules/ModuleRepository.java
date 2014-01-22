@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ModuleRepository extends JpaRepository<ModuleEntity, String> {
 
-    ModuleEntity findByID(String moduleID);
+    ModuleEntity findByModuleID(String moduleID);
+
 }
