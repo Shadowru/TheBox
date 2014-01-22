@@ -29,12 +29,6 @@
 
         <!-- Audit -->
 
-        <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-envers</artifactId>-->
-            <!--<version>4.3.0.CR1</version>-->
-        <!--</dependency>-->
-
         <!-- Tests section -->
 
         <dependency>
