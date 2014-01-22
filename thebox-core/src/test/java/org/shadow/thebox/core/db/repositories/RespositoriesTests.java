@@ -1,20 +1,25 @@
-package org.shadow.thebox.core.repositories;
+package org.shadow.thebox.core.db.repositories;
 
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.shadow.thebox.core.entities.modules.Module;
-import org.shadow.thebox.core.entities.users.Role;
-import org.shadow.thebox.core.entities.users.UserOfTheBox;
-import org.shadow.thebox.core.repositories.modules.ModuleRepository;
-import org.shadow.thebox.core.repositories.user.PersonRepository;
-import org.shadow.thebox.core.repositories.user.RoleRepository;
+import org.shadow.thebox.core.db.entities.modules.ModuleEntity;
+import org.shadow.thebox.core.db.entities.users.RoleEntity;
+import org.shadow.thebox.core.db.entities.users.UserOfTheBox;
+import org.shadow.thebox.core.db.repositories.modules.ModuleRepository;
+import org.shadow.thebox.core.db.repositories.user.PersonRepository;
+import org.shadow.thebox.core.db.repositories.user.RoleRepository;
+import org.shadow.thebox.core.module.intf.TheBoxModule;
+import org.shadow.thebox.core.module.repository.TheBoxModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,8 +30,20 @@ public class RespositoriesTests {
     @Autowired
     protected ApplicationContext ac;
 
+    @Autowired
+    protected EntityManagerFactory emf;
+
+    protected EntityManager em;
+
+    @Before
+    public void init(){
+
+        em = emf.createEntityManager();
+
+    }
 
     @Test
+    @Transactional
     public void testRepositories() {
 
         Object testObject = ac.getBean("personRepository");
@@ -37,7 +54,7 @@ public class RespositoriesTests {
 
         testObject = ac.getBean("roleRepository");
 
-        Assert.assertNotNull("Role repository bean not null", testObject);
+        Assert.assertNotNull("RoleEntity repository bean not null", testObject);
 
         RoleRepository roleRepository = (RoleRepository) testObject;
 
@@ -85,16 +102,17 @@ public class RespositoriesTests {
 
         Assert.assertNotNull(user);
 
-        Role role1 = new Role();
+        RoleEntity role1 = new RoleEntity();
         role1.setRoleName("admin");
 
-        Role role2 = new Role();
+        RoleEntity role2 = new RoleEntity();
         role2.setRoleName("user");
 
-        Role role3 = new Role();
+        RoleEntity role3 = new RoleEntity();
         role3.setRoleName("admin");
 
         roleRepository.save(role1);
+
         roleRepository.save(role2);
 
         is_exception = false;
@@ -108,7 +126,7 @@ public class RespositoriesTests {
 
         Assert.assertTrue("Check for unique role name", is_exception);
 
-        ArrayList<Role> roles = new ArrayList<Role>();
+        ArrayList<RoleEntity> roles = new ArrayList<RoleEntity>();
 
         roles.add(role1);
         roles.add(role2);
@@ -132,33 +150,42 @@ public class RespositoriesTests {
 
         user = personRepository.findOne(userID);
 
-        for (Role role : user.getRoles()) {
+        for (RoleEntity role : user.getRoles()) {
             System.out.println(role.getRoleID() + " : " +  role.getRoleName());
         }
 
         Assert.assertEquals("Check for saved roles" ,2,  user.getRoles().size());
 
-        /*
-        Revision<Integer, UserOfTheBox> revision = personRepository.findLastChangeRevision(userID);
+        role3.setRoleName("guest");
 
-        System.out.println("revision = " + revision);
-        System.out.println("revision.getRevisionNumber() = " + revision.getRevisionNumber());
-        System.out.println("revision.getRevisionDate() = " + revision.getRevisionDate());
-        */
+        roleRepository.saveAndFlush(role3);
+
+        user.getRoles().add(role3);
+
+        personRepository.saveAndFlush(user);
+
         testObject = ac.getBean("moduleRepository");
 
-        Assert.assertNotNull("Module repository bean not null", testObject);
+        Assert.assertNotNull("ModuleEntity repository bean not null", testObject);
 
         ModuleRepository moduleRepository = (ModuleRepository) testObject;
 
-        Module m = new Module();
+        ModuleEntity m = new ModuleEntity();
 
-        m.setModuleID("userModule");
+        m.setBeanName("rootModule");
+        m.setModuleID("rootModule");
         m.setModuleName("");
 
         moduleRepository.saveAndFlush(m);
 
         Assert.assertEquals("Check for module", 1, moduleRepository.findAll().size());
+
+
+        TheBoxModuleRepository tbmr = (TheBoxModuleRepository)ac.getBean("theBoxModuleRepository");
+
+        TheBoxModule tbm = tbmr.getModule("rootModule");
+
+        System.out.println("tbm.getModuleMajorVersion() = " + tbm.getModuleMajorVersion());
 
 
     }
